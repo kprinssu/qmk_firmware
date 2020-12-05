@@ -1,4 +1,6 @@
 #include QMK_KEYBOARD_H
+#include "raw_hid.h"
+#include <print.h>
 
 enum ctrl_keycodes {
     U_T_AUTO = SAFE_RANGE, //USB Extra Port Toggle Auto Detect / Always Active
@@ -53,9 +55,12 @@ void matrix_scan_user(void) {
 #define MODS_CTRL   (get_mods() & MOD_MASK_CTRL)
 #define MODS_ALT    (get_mods() & MOD_MASK_ALT)
 
+bool is_hid_connected = false;
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static uint32_t key_timer;
 
+    uprintf("HID connected? %d\n", is_hid_connected);
     switch (keycode) {
         case U_T_AUTO:
             if (record->event.pressed && MODS_SHIFT && MODS_CTRL) {
@@ -125,4 +130,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         default:
             return true; //Process all other keycodes normally
     }
+}
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    uprintf("We got data? %d\n", length);
+    raw_hid_send(data, length);
 }
