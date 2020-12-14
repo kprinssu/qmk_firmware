@@ -28,6 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PRODUCT             "CTRL Keyboard"
 #define SERIAL_NUM          "Unavailable"
 
+/* Custom USB properties for Raw HID */
+#define RAW_USAGE_PAGE 0xFF60
+#define RAW_USAGE_ID 0x61
+
 /* key matrix size */
 #define MATRIX_ROWS 11
 #define MATRIX_COLS 8
