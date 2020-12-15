@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 
+#include "raw_hid.h"
+#include "hid_commands.h"
+
 enum ctrl_keycodes {
     U_T_AUTO = SAFE_RANGE, //USB Extra Port Toggle Auto Detect / Always Active
     U_T_AGCR,              //USB Toggle Automatic GCR control
@@ -126,3 +129,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true; //Process all other keycodes normally
     }
 }
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    uint8_t command = data[0];
+
+    switch (command) {
+        case ENABLE_RGB:
+            rgb_matrix_mode_noeeprom(mode);
+            break;
+
+        case DISABLE_RGB:
+            rgb_matrix_decrease_speed_noeeprom();
+            break;
+
+        default:
+
+            break;
+    }
+
+    raw_hid_send(data, length);
+}
+
